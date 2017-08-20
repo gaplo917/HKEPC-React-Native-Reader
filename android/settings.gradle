@@ -1,0 +1,3 @@
+rootProject.name = 'HKEPC_RN'
+
+include ':app'
