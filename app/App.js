@@ -34,7 +34,8 @@ import {TopicsTab, AboutTab, FeaturesTab, FavouriteTab} from './layouts/tabs'
 
 import {
   TabRouter,
-  TabNavigator
+  TabNavigator,
+  StackNavigator
 } from 'react-navigation'
 
 
@@ -60,8 +61,30 @@ const MainTabNavigator = TabNavigator(
   {
     // Change this to start on a different tab
     initialRouteName: 'Topics',
+    tabBarPosition: 'bottom',
+    animationEnabled: false,
+    swipeEnabled: false,
   }
 )
+
+const AppNavigator = StackNavigator({
+  Root: {
+    screen: MainTabNavigator
+  },
+  // NotifSettings: {
+  //   screen: MyNotificationsSettingsScreen,
+  //   navigationOptions: {
+  //     title: 'Notifications',
+  //   },
+  // },
+  // Profile: {
+  //   screen: MyProfileScreen,
+  //   path: '/people/:name',
+  //   navigationOptions: ({ navigation }) => {
+  //     title: `${navigation.state.params.name}'s Profile!`;
+  //   },
+  // },
+})
 
 export default class App extends RxComponent {
 
@@ -72,7 +95,7 @@ export default class App extends RxComponent {
 
   render() {
     return (
-      <MainTabNavigator ref={nav => { this.navigator = nav }}/>
+      <AppNavigator ref={nav => { this.navigator = nav }}/>
     )
   }
 

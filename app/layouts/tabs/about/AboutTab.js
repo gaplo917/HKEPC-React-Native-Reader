@@ -26,7 +26,7 @@ import {
 
 export class AboutTab extends Component {
   static navigationOptions = ({ navigation }) => ({
-    tabBarLabel: '關於',
+    title: '關於',
     tabBarIcon:  ({tintColor, focused}) => (
       <Ionicons
         name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
@@ -41,18 +41,6 @@ export class AboutTab extends Component {
   render(){
     return (
       <Container>
-        <Header>
-          <Left>
-          </Left>
-          <Body>
-          <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name='refresh' />
-            </Button>
-          </Right>
-        </Header>
         <Content>
           <Text> I love to blink 4</Text>
         </Content>

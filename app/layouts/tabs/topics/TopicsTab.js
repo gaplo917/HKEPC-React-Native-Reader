@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import Rx from 'rxjs/Rx'
-
+import { View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   Container,
@@ -20,79 +20,103 @@ import {
   Body,
   List,
   ListItem,
-  Separator
+  Separator,
+  Thumbnail,
+  Spinner
 } from 'native-base'
-import RxComponent from "../../../components/rx/RxComponent";
-
+import RxComponent from "../../../components/rx/RxComponent"
+import APIService from "../../../api/APIService"
+import * as Events from "../../../events"
 
 export class TopicsTab extends RxComponent {
-  static navigationOptions = ({ navigation }) => ({
-    tabBarLabel: '論壇版塊',
-    tabBarIcon:  ({tintColor, focused}) => (
-      <Ionicons
-        name={focused ? 'ios-pulse' : 'ios-pulse-outline'}
-        size={26}
-        style={{color: tintColor}}
-      />
-    )
-  })
+  static navigationOptions = props => {
+    const { navigation } = props
+    const { state, setParams } = navigation
+    const { params } = state
+
+    return {
+      headerRight:
+        <Button transparent onPress={() => Events.hub.publishEvent(Events.REFRESH_TOPIC)}>
+          <Icon name='refresh' />
+        </Button>
+      ,
+      title: '論壇版塊',
+      tabBarIcon:  ({tintColor, focused}) => (
+        <Ionicons
+          name={focused ? 'ios-pulse' : 'ios-pulse-outline'}
+          size={26}
+          style={{color: tintColor}}
+        />
+      )
+    }
+  }
 
   constructor(){
     super()
 
     this.rx = {
-      tabIndex: new Rx.Subject(),
-      refresh: new Rx.Subject(),
+      selectedTopic: new Rx.Subject(),
 
-      html(){
-        return this.tabIndex
-          .flatMap((index) => {
-            return Rx.Observable
-              .ajax('https://jsonplaceholder.typicode.com/posts/1')
-              .map(e => e.response)
+      topics(){
+        return Events.hub.getEventStream(Events.REFRESH_TOPIC)
+          .flatMap(() => {
+            return APIService.instance.topicList()
           })
-          .map((response) => response.body)
+          .do(console.log)
+          .startWith([])
       }
     }
 
   }
+
   render(){
-    const items = ['Simon Mignolet','Nathaniel Clyne','Dejan Lovren','Mama Sakho','Emre Can']
 
     return (
       <Container>
-        <Header>
-          <Left>
-          </Left>
-          <Body>
-          <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent onPress={() => this.rx.refresh.next()}>
-              <Icon name='refresh' />
-            </Button>
-          </Right>
-        </Header>
         <Content>
-          <List dataArray={items}
-                renderRow={ (item, sec, row) => {
-                  if(row % 2 === 0){
+          {this.state.topics.length === 0 && <Spinner/>}
+          <List style={{backgroundColor: '#ffffff'}}
+                dataArray={this.state.topics}
+                renderRow={ (topic, sec, row) => {
+                  if(topic.groupName){
                     return (
-                      <Separator bordered style={{ backgroundColor: '#ff0000'}}>
-                        <Text>{row}</Text>
+                      <Separator bordered style={{backgroundColor: '#8fc320'}}>
+                        <Text style={{ color: '#ffffff', fontWeight: '700', fontSize: 16}}>{topic.groupName}</Text>
                       </Separator>
                     )
                   }
-                  return (
-                    <ListItem>
-                      <Text>{item}</Text>
-                    </ListItem>
-                  )
+                  else if (topic.name){
+                    const httpsImage = topic.image && topic.image.replace('http://', 'https://')
+                    return (
+                      <ListItem avatar onPress={() => this.rx.selectedTopic.next(topic.id)}>
+                        <Left>
+                          <Thumbnail source={{ uri: httpsImage }} small/>
+                        </Left>
+                        <Body>
+                        <Text style={{ paddingTop: 5, paddingBottom: 5 }}>{topic.name}</Text>
+                        <Text allowFontScaling={true} lineHeight={20} numberOfLines={1} note style={{ fontSize: 13, paddingTop: 5, paddingBottom: 5 }}>{topic.description}</Text>
+                        </Body>
+                        <Right style={{justifyContent: 'center', alignItems: 'center'}}>
+                          <Icon name='ios-arrow-forward' ></Icon>
+                        </Right>
+                      </ListItem>
+                    )
+                  }
+                  else {
+                    return (
+                      <View/>
+                    )
+                  }
                 }}>
           </List>
         </Content>
       </Container>
 
     )
+  }
+
+  componentDidMount(){
+    super.componentDidMount()
+    Events.hub.publishEvent(Events.REFRESH_TOPIC)
   }
 }

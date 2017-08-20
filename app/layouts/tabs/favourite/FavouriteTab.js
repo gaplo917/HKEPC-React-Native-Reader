@@ -26,7 +26,7 @@ import {
 
 export class FavouriteTab extends Component {
   static navigationOptions = ({ navigation }) => ({
-    tabBarLabel: '我的最愛',
+    title: '我的最愛',
     tabBarIcon:  ({tintColor, focused}) => (
       <Ionicons
         name={focused ? 'ios-heart' : 'ios-heart-outline'}
@@ -41,18 +41,6 @@ export class FavouriteTab extends Component {
   render(){
     return (
       <Container>
-        <Header>
-          <Left>
-          </Left>
-          <Body>
-          <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name='refresh' />
-            </Button>
-          </Right>
-        </Header>
         <Content>
           <Text> I love to blink 2</Text>
         </Content>

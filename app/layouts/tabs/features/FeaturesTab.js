@@ -26,7 +26,7 @@ import {
 
 export class FeaturesTab extends Component {
   static navigationOptions = ({ navigation }) => ({
-    tabBarLabel: `功能`,
+    title: `功能`,
     tabBarIcon:  ({tintColor, focused}) => (
       <Ionicons
         name={focused ? 'ios-infinite' : 'ios-infinite-outline'}
@@ -41,18 +41,6 @@ export class FeaturesTab extends Component {
   render(){
     return (
       <Container>
-        <Header>
-          <Left>
-          </Left>
-          <Body>
-          <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name='refresh' />
-            </Button>
-          </Right>
-        </Header>
         <Content>
           <Text> I love to blink 3</Text>
         </Content>

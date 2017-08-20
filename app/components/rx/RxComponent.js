@@ -8,11 +8,18 @@ export default class RxComponent extends Component {
   constructor(){
     super()
     this.unmountSignal = new Rx.Subject()
+    this.componentDidMountSignal = new Rx.Subject()
     this._rx = null
     this.state = {}
   }
   componentWillUnmount(){
+    console.debug('[RxComponent] componentWillUnmount')
     this.unmountSignal.next(true)
+  }
+
+  componentDidMount() {
+    console.debug('[RxComponent] componentDidMount')
+    this.componentDidMountSignal.next(true)
   }
 
   get rx(){
@@ -28,8 +35,7 @@ export default class RxComponent extends Component {
     for(let key in factories){
       console.log("setting Rx state", key)
 
-      // set initial value to null
-      this.state[key] = null
+
 
       // init once
       const value = factories[key]
@@ -43,7 +49,15 @@ export default class RxComponent extends Component {
         obs = value
       }
 
-      obs
+      let sharedObs = obs.publishReplay().refCount()
+
+      sharedObs.first(null).subscribe((initialValue) => {
+        // set initial value
+        this.state[key] = initialValue
+      })
+
+      sharedObs
+        .skipUntil(this.componentDidMountSignal)
         .takeUntil(this.unmountSignal)
         .subscribe(x => {
           this.setState(() => ({ [key]: x }))
