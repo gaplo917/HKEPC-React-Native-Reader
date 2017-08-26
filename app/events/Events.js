@@ -3,3 +3,5 @@
  */
 
 export const REFRESH_TOPIC = "REFRESH_TOPIC"
+
+export const REFRESH_POST_LIST = "REFRESH_POST_LIST"

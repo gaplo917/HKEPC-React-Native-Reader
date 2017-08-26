@@ -31,6 +31,7 @@ import {
 import RxComponent from './components/rx/RxComponent'
 
 import {TopicsTab, AboutTab, FeaturesTab, FavouriteTab} from './layouts/tabs'
+import {PostListView} from './layouts/post'
 
 import {
   TabRouter,
@@ -39,11 +40,32 @@ import {
 } from 'react-navigation'
 
 
-const MainTabNavigator = TabNavigator(
+const TopicsNavigator = StackNavigator({
+  Topics: {
+    screen: TopicsTab,
+    path:   '/topics',
+  },
+  PostListView: {
+    screen: PostListView,
+    path: '/topics/:name',
+  },
+})
+
+const AppNavigator = TabNavigator(
   {
     Topics: {
-      screen: TopicsTab,
-      path:   'topics',
+      screen: TopicsNavigator,
+      path:   '/topics',
+      navigationOptions: {
+        tabBarLabel: '論壇版塊',
+        tabBarIcon:  ({tintColor, focused}) => (
+          <Ionicons
+            name={focused ? 'ios-pulse' : 'ios-pulse-outline'}
+            size={26}
+            style={{color: tintColor}}
+          />
+        )
+      },
     },
     Favourite: {
       screen: FavouriteTab,
@@ -66,25 +88,6 @@ const MainTabNavigator = TabNavigator(
     swipeEnabled: false,
   }
 )
-
-const AppNavigator = StackNavigator({
-  Root: {
-    screen: MainTabNavigator
-  },
-  // NotifSettings: {
-  //   screen: MyNotificationsSettingsScreen,
-  //   navigationOptions: {
-  //     title: 'Notifications',
-  //   },
-  // },
-  // Profile: {
-  //   screen: MyProfileScreen,
-  //   path: '/people/:name',
-  //   navigationOptions: ({ navigation }) => {
-  //     title: `${navigation.state.params.name}'s Profile!`;
-  //   },
-  // },
-})
 
 export default class App extends RxComponent {
 

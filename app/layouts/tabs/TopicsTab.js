@@ -24,9 +24,9 @@ import {
   Thumbnail,
   Spinner
 } from 'native-base'
-import RxComponent from "../../../components/rx/RxComponent"
-import APIService from "../../../api/APIService"
-import * as Events from "../../../events"
+import RxComponent from "../../components/rx/RxComponent"
+import APIService from "../../api/APIService"
+import * as Events from "../../events"
 
 export class TopicsTab extends RxComponent {
   static navigationOptions = props => {
@@ -40,14 +40,7 @@ export class TopicsTab extends RxComponent {
           <Icon name='refresh' />
         </Button>
       ,
-      title: '論壇版塊',
-      tabBarIcon:  ({tintColor, focused}) => (
-        <Ionicons
-          name={focused ? 'ios-pulse' : 'ios-pulse-outline'}
-          size={26}
-          style={{color: tintColor}}
-        />
-      )
+      headerTitle: '論壇版塊',
     }
   }
 
@@ -88,7 +81,7 @@ export class TopicsTab extends RxComponent {
                   else if (topic.name){
                     const httpsImage = topic.image && topic.image.replace('http://', 'https://')
                     return (
-                      <ListItem avatar onPress={() => this.rx.selectedTopic.next(topic.id)}>
+                      <ListItem avatar onPress={() => this.props.navigation.navigate('PostListView', { name : topic.name })}>
                         <Left>
                           <Thumbnail source={{ uri: httpsImage }} small/>
                         </Left>
@@ -97,7 +90,7 @@ export class TopicsTab extends RxComponent {
                         <Text allowFontScaling={true} lineHeight={20} numberOfLines={1} note style={{ fontSize: 13, paddingTop: 5, paddingBottom: 5 }}>{topic.description}</Text>
                         </Body>
                         <Right style={{justifyContent: 'center', alignItems: 'center'}}>
-                          <Icon name='ios-arrow-forward' ></Icon>
+                          <Icon name='ios-arrow-forward' />
                         </Right>
                       </ListItem>
                     )
