@@ -36,13 +36,14 @@ export class GeneralHtml{
 
       const imgSrc = this.source(e).attr('src')
 
-      if(URLUtils.isRelativeUrl(imgSrc)){
-        this.source(e).attr('src',`${imagePrefix}/${imgSrc}`)
-      } else if(imgSrc.indexOf('//') == 0) {
-        this.source(e).attr('src',`http:${imgSrc}`)
+      if(imgSrc.indexOf('//') === 0) {
+        this.source(e).attr('src',`https:${imgSrc}`)
+        this.source(e).attr('raw-src', `https:${imgSrc}`)
       }
-
-      this.source(e).attr('raw-src', imgSrc)
+      else if(URLUtils.isRelativeUrl(imgSrc)){
+        this.source(e).attr('src',`${imagePrefix}${imgSrc}`)
+        this.source(e).attr('raw-src', `${imagePrefix}${imgSrc}`)
+      }
 
       // remove action attr on img
       this.source(e).removeAttr('onload')

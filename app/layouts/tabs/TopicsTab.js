@@ -87,11 +87,10 @@ export class TopicsTab extends RxComponent {
                     )
                   }
                   else if (topic.name){
-                    const httpsImage = topic.image && topic.image.replace('http://', 'https://')
                     return (
                       <ListItem avatar onPress={() => this.props.navigation.navigate('PostListView', { name : topic.name })}>
                         <Left>
-                          <Thumbnail source={{ uri: httpsImage }} small/>
+                          <Thumbnail source={{ uri: topic.image }} small />
                         </Left>
                         <Body>
                         <Text style={{ paddingTop: 5, paddingBottom: 5 }}>{topic.name}</Text>

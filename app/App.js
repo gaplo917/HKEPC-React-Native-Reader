@@ -91,17 +91,18 @@ const AppNavigator = TabNavigator(
     //animationEnabled: false,
     //swipeEnabled: false,
     tabBarOptions:{
-      labelStyle: {
-        color: '#333',
-        fontSize: 12,
+      activeTintColor: '#2a0101',
+      inactiveTintColor: '#777777',
+      labelStyle:      {
+        fontSize: 10,
       },
-      indicatorStyle: {
+      indicatorStyle:  {
         backgroundColor: '#8fc320',
       },
-      tabStyle: {
+      tabStyle:        {
         height: Platform.OS === 'ios' ? 50 : 30,
       },
-      style: {
+      style:           {
         backgroundColor: '#eeeeee',
       },
     }
