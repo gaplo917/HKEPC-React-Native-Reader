@@ -42,7 +42,7 @@ export class FavouriteTab extends Component {
     return (
       <Container>
         <Content>
-          <Text> I love to blink 2</Text>
+          <Text>Favourite</Text>
         </Content>
       </Container>
     )

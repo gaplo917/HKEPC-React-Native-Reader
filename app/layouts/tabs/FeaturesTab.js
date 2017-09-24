@@ -42,7 +42,7 @@ export class FeaturesTab extends Component {
     return (
       <Container>
         <Content>
-          <Text> I love to blink 3</Text>
+          <Text>Features</Text>
         </Content>
       </Container>
     )

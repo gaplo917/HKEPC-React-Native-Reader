@@ -7,7 +7,8 @@ import Rx from 'rxjs/Rx'
 import {
   AppRegistry,
   StyleSheet,
-  View
+  View,
+  Platform
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -49,6 +50,8 @@ const TopicsNavigator = StackNavigator({
     screen: PostListView,
     path: '/topics/:name',
   },
+}, {
+  headerMode: Platform.OS === 'ios' ? 'float' :'none',
 })
 
 const AppNavigator = TabNavigator(
@@ -59,8 +62,9 @@ const AppNavigator = TabNavigator(
       navigationOptions: {
         tabBarLabel: '論壇版塊',
         tabBarIcon:  ({tintColor, focused}) => (
-          <Ionicons
-            name={focused ? 'ios-pulse' : 'ios-pulse-outline'}
+          <Icon
+            ios={focused ? 'ios-pulse' : 'ios-pulse-outline'}
+            android='md-pulse'
             size={26}
             style={{color: tintColor}}
           />
@@ -83,9 +87,24 @@ const AppNavigator = TabNavigator(
   {
     // Change this to start on a different tab
     initialRouteName: 'Topics',
-    tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
+    //tabBarPosition: 'bottom',
+    //animationEnabled: false,
+    //swipeEnabled: false,
+    tabBarOptions:{
+      labelStyle: {
+        color: '#333',
+        fontSize: 12,
+      },
+      indicatorStyle: {
+        backgroundColor: '#8fc320',
+      },
+      tabStyle: {
+        height: Platform.OS === 'ios' ? 50 : 30,
+      },
+      style: {
+        backgroundColor: '#eeeeee',
+      },
+    }
   }
 )
 

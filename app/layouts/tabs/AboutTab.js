@@ -42,7 +42,7 @@ export class AboutTab extends Component {
     return (
       <Container>
         <Content>
-          <Text> I love to blink 4</Text>
+          <Text>About</Text>
         </Content>
       </Container>
     )

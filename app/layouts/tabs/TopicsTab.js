@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import Rx from 'rxjs/Rx'
-import { View } from 'react-native'
+import { View, Image, RefreshControl } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   Container,
@@ -49,12 +49,17 @@ export class TopicsTab extends RxComponent {
 
     this.rx = {
       selectedTopic: new Rx.Subject(),
+      isRefreshing: new Rx.BehaviorSubject(true),
 
       topics(){
         return Events.hub.getEventStream(Events.REFRESH_TOPIC)
           .flatMap(() => {
+            this.isRefreshing.next(true)
+
             return APIService.instance.topicList()
+              .do(null,null,() => this.isRefreshing.next(false))
           })
+
           .do(console.log)
           .startWith([])
       }
@@ -66,8 +71,11 @@ export class TopicsTab extends RxComponent {
 
     return (
       <Container>
-        <Content>
-          {this.state.topics.length === 0 && <Spinner/>}
+        <Content
+          refreshControl={<RefreshControl
+            refreshing={this.state.isRefreshing}
+            onRefresh={() => Events.hub.publishEvent(Events.REFRESH_TOPIC) }
+          />}>
           <List style={{backgroundColor: '#ffffff'}}
                 dataArray={this.state.topics}
                 renderRow={ (topic, sec, row) => {
