@@ -51,7 +51,7 @@ const TopicsNavigator = StackNavigator({
     path: '/topics/:name',
   },
 }, {
-  headerMode: Platform.OS === 'ios' ? 'float' :'none',
+  headerMode: 'float',
 })
 
 const AppNavigator = TabNavigator(

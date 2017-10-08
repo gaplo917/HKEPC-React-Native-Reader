@@ -54,8 +54,6 @@ export class TopicsTab extends RxComponent {
       topics(){
         return Events.hub.getEventStream(Events.REFRESH_TOPIC)
           .flatMap(() => {
-            this.isRefreshing.next(true)
-
             return APIService.instance.topicList()
               .do(null,null,() => this.isRefreshing.next(false))
           })
@@ -68,15 +66,17 @@ export class TopicsTab extends RxComponent {
   }
 
   render(){
-
     return (
       <Container>
         <Content
-          refreshControl={<RefreshControl
-            refreshing={this.state.isRefreshing}
-            onRefresh={() => Events.hub.publishEvent(Events.REFRESH_TOPIC) }
-          />}>
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={() => Events.hub.publishEvent(Events.REFRESH_TOPIC) }
+            />
+          }>
           <List style={{backgroundColor: '#ffffff'}}
+                button={true}
                 dataArray={this.state.topics}
                 renderRow={ (topic, sec, row) => {
                   if(topic.groupName){
@@ -88,7 +88,7 @@ export class TopicsTab extends RxComponent {
                   }
                   else if (topic.name){
                     return (
-                      <ListItem avatar onPress={() => this.props.navigation.navigate('PostListView', { name : topic.name })}>
+                      <ListItem avatar onPress={() => this.props.navigation.navigate('PostListView', { name : topic.name, topicId: topic.id })}>
                         <Left>
                           <Thumbnail source={{ uri: topic.image }} small />
                         </Left>
